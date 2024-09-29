@@ -1,7 +1,7 @@
 /**
  * This import must be the first import in the file.
  */
-import './utils/safeExecutionExtensions';
+import 'src/utils/safeExecutionExtensions';
 
 import type { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';

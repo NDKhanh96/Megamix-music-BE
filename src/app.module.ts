@@ -1,13 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { validate } from 'src/utils/environment';
+import { ConfigServiceModule, DatabaseConfigModule } from 'src/utils/configs';
 
 @Module({
     imports: [
-        ConfigModule.forRoot({
-            envFilePath: '.env',
-            validate
-        })
+        ConfigServiceModule,
+        DatabaseConfigModule,
     ],
     controllers: [],
     providers: [],
