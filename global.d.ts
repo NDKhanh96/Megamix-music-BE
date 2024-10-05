@@ -11,6 +11,7 @@ declare global {
          * Do unknown bao gồm cả null nên:
          *  - Nếu result là truthy thì error sẽ là null.
          *  - Nhưng nếu error là truthy thì chưa chắc result sẽ là null.
+         *  - => !result thì error sẽ là truthy.
          */
         toSafe(): Promise<[unknown, null] | [null, T]>;
     }
@@ -27,6 +28,7 @@ declare global {
          * Do unknown bao gồm cả null nên:
          *  - Nếu result là truthy thì error sẽ là null.
          *  - Nhưng nếu error là truthy thì chưa chắc result sẽ là null.
+         *  - => !result thì error sẽ là truthy.
          *
          * Với trường hợp hàm phụ thuộc vào context (bên trong hàm có this) thì cần bind context vào hàm:
          *  - const [error, result] = verify.toSafe(token);

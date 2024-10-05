@@ -23,6 +23,10 @@ $ yarn run start:prod
 
 ## Test
 
+<p>Lưu ý: Cần đổi DB_AUTO_DROP_SCHEMA trong .env thành true trước khi chạy test</p>
+<p>Lưu ý: Test E2E cần dùng import 'src/utils/safeExecutionExtensions' để chạy toSafe</p>
+<p>Lưu ý: Unit test cần tạo 1 function và chạy nó trên cùng tất cả import để chạy toSafe (vi dụ trong file auth.service.spec.ts)</p>
+
 ```bash
 # unit tests
 $ yarn run test
@@ -42,3 +46,7 @@ $ npm run migration:generate --name=<migrations file name>
 # thực thi những file migrations chưa sử dụng
 $ yarn migration:run
 ```
+## Email
+
+Vào link này để lấy app pass google, MAIL_USER là email đăng nhập, còn MAIL_PASSWORD là pass lấy ở link dưới
+<a>https://myaccount.google.com/apppasswords</p>

@@ -1,3 +1,4 @@
-export * from './configService';
-export * from './database';
+export * from 'src/utils/configs/configService';
+export * from 'src/utils/configs/database';
+export * from 'src/utils/configs/jwt';
 

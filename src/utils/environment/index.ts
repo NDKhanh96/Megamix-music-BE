@@ -38,8 +38,33 @@ export class EnvFileVariables {
         DB_PASSWORD: string;
 
     @IsNotEmpty()
+    @Transform(({ value }: TransformFnParams ): boolean => JSON.parse(value))
+    @IsBoolean()
+        DB_AUTO_DROP_SCHEMA: boolean;
+
+    @IsNotEmpty()
     @IsString()
         JWT_SECRET: string;
+
+    @IsNotEmpty()
+    @IsString()
+        JWT_EXPIRES_IN: string;
+
+    @IsNotEmpty()
+    @IsString()
+        REFRESH_TOKEN_EXPIRES_IN: string;
+
+    @IsNotEmpty()
+    @IsString()
+        BASE_URL: string;
+
+    @IsNotEmpty()
+    @IsString()
+        GOOGLE_CLIENT_ID: string;
+
+    @IsNotEmpty()
+    @IsString()
+        GOOGLE_CLIENT_SECRET: string;
 }
 
 export function validate (config: Record<string, unknown>): EnvFileVariables {

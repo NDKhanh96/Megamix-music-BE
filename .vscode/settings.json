@@ -8,5 +8,6 @@
     "typescript.preferences.preferTypeOnlyAutoImports": true,
     "cSpell.words": [
         "megamix",
+        "totp"
     ],
 }

@@ -18,6 +18,7 @@ import type { DataSourceOptions } from 'typeorm';
                 database: configService.get('DB_NAME', { infer: true }),
                 synchronize: configService.get('DB_SYNCHRONIZE', { infer: true }),
                 entities: [join(__dirname, '../../' ,'**', '*.entity.{ts,js}')],
+                dropSchema: configService.get('DB_AUTO_DROP_SCHEMA', { infer: true }),
             }),
             inject: [ConfigService],
         }),
