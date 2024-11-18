@@ -43,7 +43,8 @@ module.exports = {
         "prefer-const": "error",
         "quotes": ["error", "single"],
         "no-trailing-spaces": "error",
-        "eol-last": ["error", "always"],"no-restricted-imports": ["error", {
+        "eol-last": ["error", "always"],
+        "no-restricted-imports": ["error", {
             "patterns": [".*"]
         }],
         "semi": [

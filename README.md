@@ -46,6 +46,12 @@ $ npm run migration:generate --name=<migrations file name>
 # thực thi những file migrations chưa sử dụng
 $ yarn migration:run
 ```
+
+## Import
+```bash
+# Quy tắc import
+$ Chỉ được dùng import tuyệt đối
+```
 ## Email
 
 Vào link này để lấy app pass google, MAIL_USER là email đăng nhập, còn MAIL_PASSWORD là pass lấy ở link dưới
