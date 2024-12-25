@@ -26,6 +26,7 @@ const mockDto = {
             lastName: 'Nguyen',
             email: '123@gmail.com',
             password: '123456',
+            confirmPassword: '123456',
             picture: 'picture',
         },
     },

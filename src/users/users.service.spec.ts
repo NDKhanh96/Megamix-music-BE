@@ -39,6 +39,7 @@ const mockDto = {
             lastName: 'notfound',
             email: 'notfound@gmail.com',
             password: mockUserInfo.correctPassword,
+            confirmPassword: mockUserInfo.correctPassword,
             picture: 'picture',
             enableAppMFA: false,
             appMFASecret: '123445',
@@ -51,6 +52,7 @@ const mockDto = {
             email: 'userExist@gmail.com',
             picture: 'picture',
             password: 'password',
+            confirmPassword: 'password',
         },
         notExist: {
             firstName: 'user not existed',
@@ -58,6 +60,7 @@ const mockDto = {
             email: 'userNotExisted@gmail.com',
             picture: 'picture',
             password: '1',
+            confirmPassword: '1',
         },
     }
 };

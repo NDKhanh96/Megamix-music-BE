@@ -37,6 +37,15 @@ export class AuthController {
         return this.authService.login(loginDTO);
     }
 
+    // @Put('forgot-password')
+    // @ApiBody({ type: ForgotPasswordDto })
+    // @ApiOperation({ summary: 'Generate new password' })
+    // @ApiResponse({ status: 200, description: 'Update password successful' })
+    // @ApiResponse({ status: 401, description: 'Update password failed' })
+    // sendForgotPasswordEmail(@Body() forgotPasswordDTO: ForgotPasswordDto): Promise<UpdateResult> {
+    //     return this.authService.sendForgotPasswordEmail(forgotPasswordDTO);
+    // }
+
     @Get('google/login')
     @UseGuards(AuthGuard('google'))
     @ApiOperation({ summary: 'Go to google login. By some reason, this api can not use in swagger' })

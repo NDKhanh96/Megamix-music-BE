@@ -1,4 +1,4 @@
-import { Injectable, ServiceUnavailableException, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable, ServiceUnavailableException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -30,6 +30,12 @@ export class AuthService {
      * vậy nên kiểu dữ liệu phải là CreateUserDto & {isCredential?: boolean}
      */
     async register(userDTO: CreateUserDto & {isCredential?: boolean}): Promise<User> {
+        const { password, confirmPassword } = userDTO;
+
+        if (password !== confirmPassword) {
+            throw new ConflictException('Passwords do not match');
+        }
+
         return this.usersService.create(userDTO);
     }
 
@@ -54,6 +60,21 @@ export class AuthService {
         return this.generateUserTokens(user.email, user.id);
     }
 
+    // async sendForgotPasswordEmail(ForgotPasswordDto: ForgotPasswordDto): Promise<UpdateResult> {
+    //     const { email, newPassword, confirmNewPassword } = ForgotPasswordDto;
+
+    //     if (newPassword !== confirmNewPassword) {
+    //         throw new ConflictException('Passwords do not match');
+    //     }
+    //     const user: User | null = await this.usersService.findOneByEmail(email);
+
+    //     if (!user) {
+    //         throw new UnauthorizedException('Invalid email');
+    //     }
+
+    //     return this.usersService.update(user.email, { password: newPassword });
+    // }
+
     async googleLogin(req: Express.AuthenticatedRequest): Promise<LoginAppMFA | LoginJwt> {
         const { firstName, lastName, picture, email } = req.user;
         let user: User | null = await this.usersService.findOneByEmail(email);
@@ -65,6 +86,7 @@ export class AuthService {
                 picture: picture ?? '',
                 email,
                 password: '',
+                confirmPassword: '',
                 isCredential: false,
             });
 

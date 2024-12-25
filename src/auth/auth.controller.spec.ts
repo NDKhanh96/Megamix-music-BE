@@ -89,6 +89,7 @@ describe('AuthController', (): void => {
             lastName: 'Nguyen',
             email: '112@gmail.com',
             password: '123456',
+            confirmPassword: '123456',
             picture: 'picture',
         });
 

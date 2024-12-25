@@ -53,7 +53,8 @@ describe('Auth', (): void => {
             lastName: 'Doe',
             picture: '',
             email: 'john@gmail.com',
-            password: '123456'
+            password: '123456',
+            confirmPassword: '123456',
         };
 
         const response: request.Response = await request(app.getHttpServer())

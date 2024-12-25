@@ -65,6 +65,14 @@ export class EnvFileVariables {
     @IsNotEmpty()
     @IsString()
         GOOGLE_CLIENT_SECRET: string;
+
+    @IsNotEmpty()
+    @IsString()
+        MAIL_USER: string;
+
+    @IsNotEmpty()
+    @IsString()
+        MAIL_PASSWORD: string;
 }
 
 export function validate (config: Record<string, unknown>): EnvFileVariables {

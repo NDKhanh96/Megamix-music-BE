@@ -10,4 +10,11 @@
         "megamix",
         "totp"
     ],
+    "cSpell.ignorePaths": [
+        "yarn.lock",
+        "package-lock.json",
+        "node_modules/**",
+        ".gitignore",
+        ".env",
+    ]
 }
