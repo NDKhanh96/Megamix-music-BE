@@ -3,6 +3,7 @@
  */
 addToSafe();
 
+import { MailerService } from '@nestjs-modules/mailer';
 import { UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -134,6 +135,10 @@ const mockRefreshTokenRepository = {
             userId: 1,
             token: 'this is mock refresh token',
             expiresAt: new Date(),
+            user: {
+                email: '',
+                id: 1,
+            }
         },
         wrong: {
             tokenInvalid: {
@@ -210,22 +215,22 @@ describe('AuthService', (): void => {
                         create: jest.fn().mockResolvedValue(mockDto.registerInfo.correct),
                         findOneById: jest.fn().mockImplementation((id: number): User | null => {
                             if (id === mockDto.user.disableAppMFA.id) {
-                                return mockDto.user.disableAppMFA;
+                                return mockDto.user.disableAppMFA as User;
                             }
 
                             if (id === mockDto.user.enableAppMFA.id) {
-                                return mockDto.user.enableAppMFA;
+                                return mockDto.user.enableAppMFA as User;
                             }
 
                             return null;
                         }),
                         findOneByEmail: jest.fn().mockImplementation((email: string): User | null => {
                             if (email === mockDto.user.disableAppMFA.email) {
-                                return mockDto.user.disableAppMFA;
+                                return mockDto.user.disableAppMFA as User;
                             }
 
                             if (email === mockDto.user.enableAppMFA.email) {
-                                return mockDto.user.enableAppMFA;
+                                return mockDto.user.enableAppMFA as User;
                             }
 
                             return null;
@@ -270,7 +275,7 @@ describe('AuthService', (): void => {
                     useValue: {
                         findOne: jest.fn().mockImplementation(({ where: { token: refreshToken } }: { where: { token: string } }): RefreshToken | null => {
                             if (refreshToken === mockRequest.refreshToken.correct.refreshToken) {
-                                return mockRefreshTokenRepository.findOne.correct;
+                                return mockRefreshTokenRepository.findOne.correct as RefreshToken;
                             }
 
                             if (refreshToken === mockRequest.refreshToken.wrong.tokenInvalid.refreshToken) {
@@ -278,7 +283,7 @@ describe('AuthService', (): void => {
                             }
 
                             if (refreshToken === mockRequest.refreshToken.wrong.userIdInvalid.refreshToken) {
-                                return mockRefreshTokenRepository.findOne.wrong.userIdInvalid;
+                                return mockRefreshTokenRepository.findOne.wrong.userIdInvalid as RefreshToken;
                             }
 
                             if (refreshToken === mockRequest.refreshToken.wrong.expiresToken.refreshToken) {
@@ -291,6 +296,12 @@ describe('AuthService', (): void => {
                         save: jest.fn().mockResolvedValue(mockRefreshTokenRepository.save),
                     },
                 },
+                {
+                    provide: MailerService,
+                    useValue: {
+                        sendMail: jest.fn().mockResolvedValue([null, 'mock result']),
+                    },
+                }
             ],
         }).compile();
 
@@ -374,12 +385,6 @@ describe('AuthService', (): void => {
             const fn: Promise<LoginJwt> = authService.refreshToken(mockRequest.refreshToken.wrong.tokenInvalid.refreshToken);
 
             await expect(fn).rejects.toThrow(new UnauthorizedException('Refresh Token Invalid'));
-        });
-
-        it('should throw UnauthorizedException with wrong userId in refresh token', async (): Promise<void> => {
-            const fn: Promise<LoginJwt> = authService.refreshToken(mockRequest.refreshToken.wrong.userIdInvalid.refreshToken);
-
-            await expect(fn).rejects.toThrow(new UnauthorizedException());
         });
 
         it('should throw UnauthorizedException with expires refresh token', async (): Promise<void> => {

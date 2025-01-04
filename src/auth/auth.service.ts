@@ -1,10 +1,11 @@
+import { MailerService } from '@nestjs-modules/mailer';
 import { ConflictException, Injectable, ServiceUnavailableException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { compare } from 'bcrypt';
 import { generateSecret, totp, type GeneratedSecret } from 'speakeasy';
-import type { LoginDto } from 'src/auth/dto';
+import type { ForgotPasswordRequestDTO, LoginDto } from 'src/auth/dto';
 import { RefreshToken } from 'src/auth/entities';
 import type { JwtPayload, LoginAppMFA, LoginJwt } from 'src/types';
 import type { CreateUserDto } from 'src/users/dto';
@@ -22,6 +23,7 @@ export class AuthService {
         private readonly usersService: UsersService,
         private readonly configService: ConfigService<EnvFileVariables, true>,
         private readonly jwtService: JwtService,
+        private readonly mailerService: MailerService,
     ) {}
 
     /**
@@ -60,20 +62,26 @@ export class AuthService {
         return this.generateUserTokens(user.email, user.id);
     }
 
-    // async sendForgotPasswordEmail(ForgotPasswordDto: ForgotPasswordDto): Promise<UpdateResult> {
-    //     const { email, newPassword, confirmNewPassword } = ForgotPasswordDto;
+    async sendForgotPasswordEmail(ForgotPasswordRequestDTO: ForgotPasswordRequestDTO): Promise<{ message: string }> {
+        const { email } = ForgotPasswordRequestDTO;
 
-    //     if (newPassword !== confirmNewPassword) {
-    //         throw new ConflictException('Passwords do not match');
-    //     }
-    //     const user: User | null = await this.usersService.findOneByEmail(email);
+        const [error, result] = await this.mailerService.sendMail({
+            to: email,
+            subject: 'Forgot Password',
+            template: './forgot-password',
+            context: {
+                email,
+            }
+        }).toSafe();
 
-    //     if (!user) {
-    //         throw new UnauthorizedException('Invalid email');
-    //     }
+        if (!result) {
+            const message: string = error instanceof Error ? error.message : 'Error while sending email';
 
-    //     return this.usersService.update(user.email, { password: newPassword });
-    // }
+            throw new ServiceUnavailableException(message);
+        }
+
+        return { message: 'Email sent' };
+    }
 
     async googleLogin(req: Express.AuthenticatedRequest): Promise<LoginAppMFA | LoginJwt> {
         const { firstName, lastName, picture, email } = req.user;
@@ -111,11 +119,7 @@ export class AuthService {
         if (!token) {
             throw new UnauthorizedException('Refresh Token Invalid');
         }
-        const user: User | null = await this.usersService.findOneById(token.userId);
-
-        if (!user) {
-            throw new UnauthorizedException();
-        }
+        const user: User = token.user;
 
         return this.generateUserTokens(user.email, user.id);
     }

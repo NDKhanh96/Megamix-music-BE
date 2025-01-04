@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/users/entities';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('refresh_tokens')
 export class RefreshToken {
@@ -13,4 +14,7 @@ export class RefreshToken {
 
     @Column()
         expiresAt: Date;
+
+    @OneToOne(() => User, (user => user.refreshToken))
+        user: User;
 }

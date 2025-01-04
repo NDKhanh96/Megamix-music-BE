@@ -1,5 +1,6 @@
 import { Exclude } from 'class-transformer';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { RefreshToken } from 'src/auth/entities';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('users')
 export class User {
@@ -30,6 +31,12 @@ export class User {
 
     @Column({ default: true, type: 'boolean' })
         isCredential: boolean;
+
+    /**
+     * Khi xoá user thì cũng xoá luôn refresh token của user đó bằng onDelete: 'CASCADE'
+     */
+    @OneToOne(() => RefreshToken, refreshToken => refreshToken.user, { cascade: true, onDelete: 'CASCADE' })
+        refreshToken: RefreshToken;
 
     constructor(partial: Partial<User>) {
         Object.assign(this, partial);

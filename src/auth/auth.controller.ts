@@ -2,7 +2,7 @@ import { Body, Controller, Get, HttpCode, Post, Req, UseGuards } from '@nestjs/c
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from 'src/auth/auth.service';
-import { LoginDto, RefreshTokenDto, ValidateTokenDTO } from 'src/auth/dto';
+import { ForgotPasswordRequestDTO, LoginDto, RefreshTokenDto, ValidateTokenDTO } from 'src/auth/dto';
 import type { LoginAppMFA, LoginJwt } from 'src/types';
 import { CreateUserDto } from 'src/users/dto';
 import { User } from 'src/users/entities';
@@ -37,14 +37,14 @@ export class AuthController {
         return this.authService.login(loginDTO);
     }
 
-    // @Put('forgot-password')
-    // @ApiBody({ type: ForgotPasswordDto })
-    // @ApiOperation({ summary: 'Generate new password' })
-    // @ApiResponse({ status: 200, description: 'Update password successful' })
-    // @ApiResponse({ status: 401, description: 'Update password failed' })
-    // sendForgotPasswordEmail(@Body() forgotPasswordDTO: ForgotPasswordDto): Promise<UpdateResult> {
-    //     return this.authService.sendForgotPasswordEmail(forgotPasswordDTO);
-    // }
+    @Post('send-forgot-password-email')
+    @ApiBody({ type: ForgotPasswordRequestDTO })
+    @ApiOperation({ summary: 'Generate new password' })
+    @ApiResponse({ status: 201, description: 'Update password successful' })
+    @ApiResponse({ status: 401, description: 'Update password failed' })
+    sendForgotPasswordEmail(@Body() ForgotPasswordRequestDTO: ForgotPasswordRequestDTO): Promise<{ message: string }> {
+        return this.authService.sendForgotPasswordEmail(ForgotPasswordRequestDTO);
+    }
 
     @Get('google/login')
     @UseGuards(AuthGuard('google'))

@@ -1,8 +1,10 @@
 import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+
 import { AuthModule } from 'src/auth/auth.module';
 import { UsersModule } from 'src/users/users.module';
 import { ConfigServiceModule, DatabaseConfigModule, JwtConfigModule } from 'src/utils/configs';
+import { MailerServiceModule } from 'src/utils/configs/mailerService';
 
 @Module({
     imports: [
@@ -12,6 +14,7 @@ import { ConfigServiceModule, DatabaseConfigModule, JwtConfigModule } from 'src/
         ConfigServiceModule,
         DatabaseConfigModule,
         JwtConfigModule,
+        MailerServiceModule,
         AuthModule,
         UsersModule,
     ],
